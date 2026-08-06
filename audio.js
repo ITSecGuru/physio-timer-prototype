@@ -1,60 +1,51 @@
-// Simple audio + count engine using Web Audio API and SpeechSynthesis
-
 class AudioEngine {
   constructor() {
     this.audioEnabled = true;
-    this.context = null;
-    this.initContext();
-  }
-
-  initContext() {
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      this.context = new AudioContext();
-    } catch (e) {
-      console.warn("Web Audio API not supported, falling back to basic audio.");
-      this.context = null;
-    }
+    this.music = new Audio("soothing.mp3");
+    this.music.volume = 0.4;
   }
 
   setAudioEnabled(enabled) {
     this.audioEnabled = enabled;
   }
 
-  beep() {
-    if (!this.audioEnabled || !this.context) return;
-
-    const osc = this.context.createOscillator();
-    const gain = this.context.createGain();
-
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(1000, this.context.currentTime);
-    gain.gain.setValueAtTime(0.2, this.context.currentTime);
-
-    osc.connect(gain);
-    gain.connect(this.context.destination);
-
-    osc.start();
-    osc.stop(this.context.currentTime + 0.1);
-  }
-
-  speak(text) {
+  speak(text, voiceName = null) {
     if (!this.audioEnabled) return;
     if (!("speechSynthesis" in window)) return;
 
     const utter = new SpeechSynthesisUtterance(text);
-    utter.rate = 1.1;
+    utter.rate = 1.0;
     utter.pitch = 1.0;
-    window.speechSynthesis.speak(utter);
+
+    if (voiceName) {
+      const voices = speechSynthesis.getVoices();
+      const v = voices.find(x => x.name.includes(voiceName));
+      if (v) utter.voice = v;
+    }
+
+    speechSynthesis.speak(utter);
   }
 
-  beepAndCount(count) {
-    this.beep();
-    this.speak(String(count));
+  announceRepeat(current, total) {
+    this.speak(`Repeat ${current} of ${total}`, "Google UK English Male");
   }
 
-  announce(phrase) {
-    this.speak(phrase);
+  holdCount(second) {
+    if (second === 1) {
+      this.speak("Hold", "Google US English");
+    } else {
+      this.speak(String(second), "Google US English");
+    }
+  }
+
+  announceRest() {
+    this.speak("Take rest for 30 seconds", "Google US English");
+  }
+
+  playSoothingMusic() {
+    this.music.currentTime = 0;
+    this.music.play();
+    setTimeout(() => this.music.pause(), 30000);
   }
 }
 
