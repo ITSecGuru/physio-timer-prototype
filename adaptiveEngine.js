@@ -1,5 +1,3 @@
-// Adaptive gap engine: adjusts gap based on user "Next" timing
-
 class AdaptiveEngine {
   constructor(initialGapSec) {
     this.baseGapSec = initialGapSec;
@@ -12,32 +10,11 @@ class AdaptiveEngine {
     this.enabled = enabled;
   }
 
-  setBaseGap(sec) {
-    this.baseGapSec = sec;
-    if (this.history.length === 0) {
-      this.currentGapSec = sec;
-    }
-  }
-
-  recordRepeat(phaseDurationSec, expectedGapSec, userAdvancedEarly) {
-    if (!this.enabled) {
-      this.currentGapSec = expectedGapSec;
-      return;
-    }
+  recordRepeat(userAdvancedEarly) {
+    if (!this.enabled) return;
 
     const delta = userAdvancedEarly ? -0.5 : 0.5;
-    this.currentGapSec = Math.max(0, expectedGapSec + delta);
-
-    this.history.push({
-      phaseDurationSec,
-      expectedGapSec,
-      userAdvancedEarly,
-      newGapSec: this.currentGapSec
-    });
-
-    if (this.history.length > 20) {
-      this.history.shift();
-    }
+    this.currentGapSec = Math.max(0, this.currentGapSec + delta);
   }
 
   getCurrentGap() {
