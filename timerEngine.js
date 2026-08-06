@@ -1,5 +1,3 @@
-// Core timing state machine: MOVE → HOLD → GAP → NEXT
-
 const PHASES = {
   IDLE: "IDLE",
   PREP: "PREP",
@@ -30,30 +28,23 @@ class TimerEngine {
     this.currentRepeat = 1;
     this.phase = PHASES.PREP;
     this.secondsInPhase = 0;
-    this._notifyUpdate();
     this._startTick();
   }
 
   _startTick() {
     if (this.intervalId) clearInterval(this.intervalId);
     this.intervalId = setInterval(() => {
-      if (this.paused) return;
-      this._tick();
+      if (!this.paused) this._tick();
     }, 1000);
   }
 
   _tick() {
     this.secondsInPhase += 1;
 
-    if (this.phase !== PHASES.IDLE && this.phase !== PHASES.COMPLETE) {
-      window.audioEngine.beepAndCount(this.secondsInPhase);
-    }
-
     switch (this.phase) {
       case PHASES.PREP:
         if (this.secondsInPhase >= 1) {
           this._transitionTo(PHASES.MOVE);
-          window.audioEngine.announce("Start movement");
         }
         break;
 
@@ -61,31 +52,29 @@ class TimerEngine {
         if (this.secondsInPhase >= this.config.moveDurationSec) {
           if (this.config.holdDurationSec > 0) {
             this._transitionTo(PHASES.HOLD);
-            window.audioEngine.announce("Hold");
           } else {
             this._transitionTo(PHASES.GAP);
-            window.audioEngine.announce("Relax");
           }
         }
         break;
 
       case PHASES.HOLD:
+        window.audioEngine.holdCount(this.secondsInPhase);
+
         if (this.secondsInPhase >= this.config.holdDurationSec) {
           this._transitionTo(PHASES.GAP);
-          window.audioEngine.announce("Relax");
         }
         break;
 
       case PHASES.GAP:
-        const currentGap = this.adaptiveEngine.getCurrentGap();
-        if (this.secondsInPhase >= currentGap) {
+        const gap = this.adaptiveEngine.getCurrentGap();
+        if (this.secondsInPhase >= gap) {
           this._advanceRepeat(false);
         }
         break;
 
       case PHASES.COMPLETE:
         clearInterval(this.intervalId);
-        this.intervalId = null;
         break;
     }
 
@@ -95,31 +84,28 @@ class TimerEngine {
   _transitionTo(newPhase) {
     this.phase = newPhase;
     this.secondsInPhase = 0;
-    this._notifyUpdate();
   }
 
   _advanceRepeat(userAdvancedEarly) {
-    const expectedGap = this.config.gapDurationSec;
-    this.adaptiveEngine.recordRepeat(
-      this.secondsInPhase,
-      expectedGap,
-      userAdvancedEarly
-    );
+    this.adaptiveEngine.recordRepeat(userAdvancedEarly);
 
     if (this.currentRepeat < this.config.repeats) {
       this.currentRepeat += 1;
+      window.audioEngine.announceRepeat(this.currentRepeat, this.config.repeats);
       this._transitionTo(PHASES.MOVE);
-      window.audioEngine.announce("Next repeat");
     } else {
       if (this.currentSet < this.config.sets) {
         this.currentSet += 1;
         this.currentRepeat = 1;
-        this._transitionTo(PHASES.MOVE);
-        window.audioEngine.announce("Next set");
+
+        window.audioEngine.announceRest();
+        window.audioEngine.playSoothingMusic();
+
+        this._transitionTo(PHASES.GAP);
+        this.secondsInPhase = -30;
       } else {
         this.phase = PHASES.COMPLETE;
-        this.secondsInPhase = 0;
-        window.audioEngine.announce("Session complete");
+        window.audioEngine.speak("Session complete");
       }
     }
 
@@ -127,8 +113,9 @@ class TimerEngine {
   }
 
   manualNext() {
-    if (this.phase === PHASES.COMPLETE || this.phase === PHASES.IDLE) return;
-    this._advanceRepeat(true);
+    if (this.phase !== PHASES.COMPLETE) {
+      this._advanceRepeat(true);
+    }
   }
 
   pause() {
@@ -141,7 +128,6 @@ class TimerEngine {
 
   reset() {
     clearInterval(this.intervalId);
-    this.intervalId = null;
     this.phase = PHASES.IDLE;
     this.secondsInPhase = 0;
     this.currentSet = 1;
@@ -155,9 +141,6 @@ class TimerEngine {
     const totalRepeats = this.config.repeats;
     const totalSets = this.config.sets;
 
-    const setProgress = (this.currentSet - 1) / totalSets;
-    const repeatProgress = (this.currentRepeat - 1) / totalRepeats;
-
     this.callbacks.onUpdate({
       phase: this.phase,
       secondsInPhase: this.secondsInPhase,
@@ -166,8 +149,8 @@ class TimerEngine {
       currentRepeat: this.currentRepeat,
       totalRepeats,
       adaptiveGapSec: this.adaptiveEngine.getCurrentGap(),
-      setProgress,
-      repeatProgress
+      setProgress: (this.currentSet - 1) / totalSets,
+      repeatProgress: (this.currentRepeat - 1) / totalRepeats
     });
   }
 }
