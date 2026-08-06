@@ -50,7 +50,7 @@
 
         <label class="checkbox-label">
           <input id="audioEnabled" type="checkbox" checked />
-          Enable audio (beep + count)
+          Enable audio
         </label>
       </div>
 
@@ -61,44 +61,22 @@
     <section class="status-panel">
       <h2>Session Status</h2>
       <div class="status-grid">
-        <div>
-          <span class="label">Exercise:</span>
-          <span id="statusExercise">-</span>
-        </div>
-        <div>
-          <span class="label">Set:</span>
-          <span id="statusSet">0 / 0</span>
-        </div>
-        <div>
-          <span class="label">Repeat:</span>
-          <span id="statusRepeat">0 / 0</span>
-        </div>
-        <div>
-          <span class="label">Phase:</span>
-          <span id="statusPhase">IDLE</span>
-        </div>
-        <div>
-          <span class="label">Seconds in phase:</span>
-          <span id="statusSeconds">0</span>
-        </div>
-        <div>
-          <span class="label">Adaptive gap (sec):</span>
-          <span id="statusAdaptiveGap">-</span>
-        </div>
+        <div><span class="label">Exercise:</span> <span id="statusExercise">-</span></div>
+        <div><span class="label">Set:</span> <span id="statusSet">0 / 0</span></div>
+        <div><span class="label">Repeat:</span> <span id="statusRepeat">0 / 0</span></div>
+        <div><span class="label">Phase:</span> <span id="statusPhase">IDLE</span></div>
+        <div><span class="label">Seconds in phase:</span> <span id="statusSeconds">0</span></div>
+        <div><span class="label">Adaptive gap (sec):</span> <span id="statusAdaptiveGap">-</span></div>
       </div>
 
       <div class="progress-bars">
         <div class="progress-row">
           <span>Set progress</span>
-          <div class="progress">
-            <div id="setProgressBar" class="progress-inner"></div>
-          </div>
+          <div class="progress"><div id="setProgressBar" class="progress-inner"></div></div>
         </div>
         <div class="progress-row">
           <span>Repeat progress</span>
-          <div class="progress">
-            <div id="repeatProgressBar" class="progress-inner"></div>
-          </div>
+          <div class="progress"><div id="repeatProgressBar" class="progress-inner"></div></div>
         </div>
       </div>
     </section>
@@ -111,7 +89,7 @@
       </div>
 
       <div class="controls">
-        <button id="nextBtn" class="primary-btn">Next (Skip / Advance)</button>
+        <button id="nextBtn" class="primary-btn">Next</button>
         <button id="pauseBtn" class="secondary-btn">Pause</button>
         <button id="resumeBtn" class="secondary-btn">Resume</button>
       </div>
