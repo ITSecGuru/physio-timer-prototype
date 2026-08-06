@@ -20,10 +20,6 @@ h1 {
   margin-bottom: 1rem;
 }
 
-h2 {
-  margin-top: 0;
-}
-
 section {
   background: #1f2937;
   border-radius: 0.75rem;
@@ -32,11 +28,10 @@ section {
   border: 1px solid #374151;
 }
 
-.config-panel .config-grid {
+.config-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.75rem;
-  margin-bottom: 1rem;
 }
 
 label {
@@ -72,40 +67,17 @@ button {
 .primary-btn {
   background: #3b82f6;
   color: #f9fafb;
-  margin-right: 0.5rem;
-}
-
-.primary-btn:hover {
-  background: #2563eb;
 }
 
 .secondary-btn {
   background: #4b5563;
   color: #f9fafb;
-  margin-right: 0.5rem;
 }
 
-.secondary-btn:hover {
-  background: #374151;
-}
-
-.status-panel .status-grid {
+.status-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.5rem;
-}
-
-.status-grid .label {
-  font-weight: 600;
-  margin-right: 0.25rem;
-}
-
-.progress-bars {
-  margin-top: 0.75rem;
-}
-
-.progress-row {
-  margin-bottom: 0.5rem;
 }
 
 .progress {
@@ -127,33 +99,7 @@ button {
   text-align: center;
 }
 
-.timer-display {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.phase-label {
-  font-size: 1.1rem;
-  margin-bottom: 0.25rem;
-}
-
 .phase-timer {
   font-size: 2.5rem;
   font-weight: 700;
-}
-
-.controls {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-footer {
-  text-align: center;
-  font-size: 0.8rem;
-  color: #9ca3af;
-  margin-top: 0.5rem;
 }
