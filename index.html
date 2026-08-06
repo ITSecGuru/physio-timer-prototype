@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Physio Timer Prototype</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <h1>Physio Timing Coach</h1>
+
+    <section class="config-panel">
+      <h2>Session Settings</h2>
+      <div class="config-grid">
+        <label>
+          Exercise name
+          <input id="exerciseName" type="text" value="Knee Extension" />
+        </label>
+
+        <label>
+          Repeats per set
+          <input id="repeats" type="number" min="1" max="50" value="15" />
+        </label>
+
+        <label>
+          Number of sets
+          <input id="sets" type="number" min="1" max="10" value="3" />
+        </label>
+
+        <label>
+          Movement duration (sec)
+          <input id="moveDuration" type="number" min="1" max="10" value="3" />
+        </label>
+
+        <label>
+          Hold duration (sec)
+          <input id="holdDuration" type="number" min="0" max="30" value="5" />
+        </label>
+
+        <label>
+          Gap duration (sec)
+          <input id="gapDuration" type="number" min="0" max="30" value="4" />
+        </label>
+
+        <label class="checkbox-label">
+          <input id="adaptiveGap" type="checkbox" checked />
+          Enable adaptive gap
+        </label>
+
+        <label class="checkbox-label">
+          <input id="audioEnabled" type="checkbox" checked />
+          Enable audio (beep + count)
+        </label>
+      </div>
+
+      <button id="startBtn" class="primary-btn">Start Session</button>
+      <button id="resetBtn" class="secondary-btn">Reset</button>
+    </section>
+
+    <section class="status-panel">
+      <h2>Session Status</h2>
+      <div class="status-grid">
+        <div>
+          <span class="label">Exercise:</span>
+          <span id="statusExercise">-</span>
+        </div>
+        <div>
+          <span class="label">Set:</span>
+          <span id="statusSet">0 / 0</span>
+        </div>
+        <div>
+          <span class="label">Repeat:</span>
+          <span id="statusRepeat">0 / 0</span>
+        </div>
+        <div>
+          <span class="label">Phase:</span>
+          <span id="statusPhase">IDLE</span>
+        </div>
+        <div>
+          <span class="label">Seconds in phase:</span>
+          <span id="statusSeconds">0</span>
+        </div>
+        <div>
+          <span class="label">Adaptive gap (sec):</span>
+          <span id="statusAdaptiveGap">-</span>
+        </div>
+      </div>
+
+      <div class="progress-bars">
+        <div class="progress-row">
+          <span>Set progress</span>
+          <div class="progress">
+            <div id="setProgressBar" class="progress-inner"></div>
+          </div>
+        </div>
+        <div class="progress-row">
+          <span>Repeat progress</span>
+          <div class="progress">
+            <div id="repeatProgressBar" class="progress-inner"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="timer-panel">
+      <h2>Timer & Controls</h2>
+      <div class="timer-display">
+        <div id="phaseLabel" class="phase-label">IDLE</div>
+        <div id="phaseTimer" class="phase-timer">0</div>
+      </div>
+
+      <div class="controls">
+        <button id="nextBtn" class="primary-btn">Next (Skip / Advance)</button>
+        <button id="pauseBtn" class="secondary-btn">Pause</button>
+        <button id="resumeBtn" class="secondary-btn">Resume</button>
+      </div>
+    </section>
+
+    <footer>
+      <p>Prototype hosted via GitHub Pages — ITSecGuru</p>
+    </footer>
+  </div>
+
+  <script src="audio.js"></script>
+  <script src="adaptiveEngine.js"></script>
+  <script src="timerEngine.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
