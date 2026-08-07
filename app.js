@@ -2,15 +2,17 @@ let timerEngine = null;
 
 function getConfigFromUI() {
   const exerciseName = document.getElementById("exerciseName").value || "Exercise";
-  const repeats = Number(document.getElementById("repeats").value);
-  const sets = Number(document.getElementById("sets").value);
-  const moveDurationSec = Number(document.getElementById("moveDuration").value);
-  const holdDurationSec = Number(document.getElementById("holdDuration").value);
-  const gapDurationSec = Number(document.getElementById("gapDuration").value);
+  const repeats = Number(document.getElementById("repeats").value) || 10;
+  const sets = Number(document.getElementById("sets").value) || 2;
+  const moveDurationSec = Number(document.getElementById("moveDuration").value) || 3;
+  const holdDurationSec = Number(document.getElementById("holdDuration").value) || 0;
+  const gapDurationSec = Number(document.getElementById("gapDuration").value) || 3;
   const adaptiveGap = document.getElementById("adaptiveGap").checked;
   const audioEnabled = document.getElementById("audioEnabled").checked;
+  const languageMode = document.getElementById("languageMode").value;
 
   window.audioEngine.setAudioEnabled(audioEnabled);
+  window.audioEngine.setLanguageMode(languageMode);
 
   return {
     exerciseName,
@@ -38,13 +40,19 @@ function updateUI(state, exerciseName) {
   document.getElementById("phaseTimer").textContent = state.secondsInPhase;
 
   document.getElementById("setProgressBar").style.width =
-    `${state.setProgress * 100}%`;
+    `${Math.min(100, state.setProgress * 100)}%`;
   document.getElementById("repeatProgressBar").style.width =
-    `${state.repeatProgress * 100}%`;
+    `${Math.min(100, state.repeatProgress * 100)}%`;
 }
 
 function init() {
-  document.getElementById("startBtn").addEventListener("click", () => {
+  const startBtn = document.getElementById("startBtn");
+  const resetBtn = document.getElementById("resetBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const pauseBtn = document.getElementById("pauseBtn");
+  const resumeBtn = document.getElementById("resumeBtn");
+
+  startBtn.addEventListener("click", () => {
     const config = getConfigFromUI();
 
     if (timerEngine) timerEngine.reset();
@@ -56,21 +64,27 @@ function init() {
     timerEngine.start();
   });
 
-  document.getElementById("resetBtn").addEventListener("click", () => {
+  resetBtn.addEventListener("click", () => {
     if (timerEngine) timerEngine.reset();
   });
 
-  document.getElementById("nextBtn").addEventListener("click", () => {
+  nextBtn.addEventListener("click", () => {
     if (timerEngine) timerEngine.manualNext();
   });
 
-  document.getElementById("pauseBtn").addEventListener("click", () => {
+  pauseBtn.addEventListener("click", () => {
     if (timerEngine) timerEngine.pause();
   });
 
-  document.getElementById("resumeBtn").addEventListener("click", () => {
+  resumeBtn.addEventListener("click", () => {
     if (timerEngine) timerEngine.resume();
   });
 }
 
-document.addEventListener("DOMContentLoaded", init);
+document.addEventListener("DOMContentLoaded", () => {
+  // Ensure voices are loaded before first speak
+  if ("speechSynthesis" in window) {
+    speechSynthesis.onvoiceschanged = () => {};
+  }
+  init();
+});
