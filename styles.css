@@ -41,7 +41,8 @@ label {
 }
 
 input[type="text"],
-input[type="number"] {
+input[type="number"],
+select {
   margin-top: 0.25rem;
   padding: 0.4rem 0.5rem;
   border-radius: 0.4rem;
@@ -67,17 +68,31 @@ button {
 .primary-btn {
   background: #3b82f6;
   color: #f9fafb;
+  margin-right: 0.5rem;
 }
 
 .secondary-btn {
   background: #4b5563;
   color: #f9fafb;
+  margin-right: 0.5rem;
 }
 
 .status-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0.5rem;
+}
+
+.status-grid .label {
+  font-weight: 600;
+}
+
+.progress-bars {
+  margin-top: 0.75rem;
+}
+
+.progress-row {
+  margin-bottom: 0.5rem;
 }
 
 .progress {
@@ -99,7 +114,33 @@ button {
   text-align: center;
 }
 
+.timer-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.phase-label {
+  font-size: 1.1rem;
+  margin-bottom: 0.25rem;
+}
+
 .phase-timer {
   font-size: 2.5rem;
   font-weight: 700;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  margin-top: 0.5rem;
 }
