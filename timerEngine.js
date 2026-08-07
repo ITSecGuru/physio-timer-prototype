@@ -60,7 +60,6 @@ class TimerEngine {
 
       case PHASES.HOLD:
         window.audioEngine.holdCount(this.secondsInPhase);
-
         if (this.secondsInPhase >= this.config.holdDurationSec) {
           this._transitionTo(PHASES.GAP);
         }
@@ -105,7 +104,7 @@ class TimerEngine {
         this.secondsInPhase = -30;
       } else {
         this.phase = PHASES.COMPLETE;
-        window.audioEngine.speak("Session complete");
+        window.audioEngine.speak("Session complete", "english");
       }
     }
 
@@ -113,7 +112,7 @@ class TimerEngine {
   }
 
   manualNext() {
-    if (this.phase !== PHASES.COMPLETE) {
+    if (this.phase !== PHASES.COMPLETE && this.phase !== PHASES.IDLE) {
       this._advanceRepeat(true);
     }
   }
