@@ -46,6 +46,8 @@ Hosted using GitHub Pages.
 - Tablet
 - Desktop
 
+## project structuer
+
 ---
 
 ## 📂 Project Structure
