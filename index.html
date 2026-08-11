@@ -15,8 +15,17 @@
       <div class="config-grid">
         <label>
           Exercise name
-          <input id="exerciseName" type="text" value="Knee Extension" />
+          <select id="exerciseName"></select>
         </label>
+
+        <label>
+          Add new exercise
+          <input id="newExerciseName" type="text" placeholder="Type a new exercise name" />
+        </label>
+
+        <div class="config-actions">
+          <button id="addExerciseBtn" class="secondary-btn" type="button">Add / Save Exercise</button>
+        </div>
 
         <label>
           Repeats per set
@@ -67,6 +76,12 @@
       <button id="resetBtn" class="secondary-btn">Reset</button>
     </section>
 
+    <section class="exercise-panel">
+      <h2>Saved Exercises</h2>
+      <div id="exerciseListEmpty" class="history-empty">No saved exercises available.</div>
+      <ul id="exerciseList" class="exercise-list"></ul>
+    </section>
+
     <section class="status-panel">
       <h2>Session Status</h2>
       <div class="status-grid">
@@ -102,6 +117,17 @@
         <button id="pauseBtn" class="secondary-btn">Pause</button>
         <button id="resumeBtn" class="secondary-btn">Resume</button>
       </div>
+    </section>
+
+    <section class="history-panel">
+      <h2>Completed Exercises</h2>
+      <div class="history-actions">
+        <button id="exportHistoryBtn" class="secondary-btn" type="button">Export CSV</button>
+        <button id="purgeHistoryBtn" class="secondary-btn" type="button">Purge History</button>
+      </div>
+      <div class="history-note">History is kept for 30 days and trimmed automatically.</div>
+      <div id="completionHistoryEmpty" class="history-empty">No completed exercises recorded yet.</div>
+      <ul id="completionHistory" class="history-list"></ul>
     </section>
 
     <footer>

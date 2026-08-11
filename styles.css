@@ -34,6 +34,11 @@ section {
   gap: 0.75rem;
 }
 
+.config-actions {
+  display: flex;
+  align-items: end;
+}
+
 label {
   display: flex;
   flex-direction: column;
@@ -75,6 +80,64 @@ button {
   background: #4b5563;
   color: #f9fafb;
   margin-right: 0.5rem;
+}
+
+.history-panel {
+  text-align: left;
+}
+
+.history-actions {
+  margin: 0.5rem 0 0.75rem;
+}
+
+.history-note {
+  color: #9ca3af;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+}
+
+.history-empty {
+  color: #9ca3af;
+  font-size: 0.95rem;
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.history-list li {
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.5rem;
+  background: #111827;
+  border: 1px solid #374151;
+  color: #e5e7eb;
+}
+
+.exercise-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.exercise-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.5rem;
+  background: #111827;
+  border: 1px solid #374151;
+}
+
+.exercise-remove-btn {
+  margin-right: 0;
 }
 
 .status-grid {

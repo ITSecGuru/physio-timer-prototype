@@ -18,6 +18,7 @@ class TimerEngine {
     this.secondsInPhase = 0;
     this.intervalId = null;
     this.paused = false;
+    this.completionNotified = false;
 
     this.adaptiveEngine = new window.AdaptiveEngine(config.gapDurationSec);
     this.adaptiveEngine.setEnabled(config.adaptiveGap);
@@ -28,6 +29,7 @@ class TimerEngine {
     this.currentRepeat = 1;
     this.phase = PHASES.PREP;
     this.secondsInPhase = 0;
+    this.completionNotified = false;
     this._startTick();
   }
 
@@ -105,6 +107,14 @@ class TimerEngine {
       } else {
         this.phase = PHASES.COMPLETE;
         window.audioEngine.speak("Session complete", "english");
+
+        if (!this.completionNotified && this.callbacks?.onComplete) {
+          this.completionNotified = true;
+          this.callbacks.onComplete({
+            exerciseName: this.config.exerciseName,
+            completedAt: new Date().toISOString()
+          });
+        }
       }
     }
 
@@ -131,6 +141,7 @@ class TimerEngine {
     this.secondsInPhase = 0;
     this.currentSet = 1;
     this.currentRepeat = 1;
+    this.completionNotified = false;
     this._notifyUpdate();
   }
 
