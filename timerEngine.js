@@ -61,7 +61,7 @@ class TimerEngine {
         break;
 
       case PHASES.HOLD:
-        window.audioEngine.holdCount(this.secondsInPhase);
+        window.audioEngine.holdCount(this.secondsInPhase, this.config.holdDurationSec);
         if (this.secondsInPhase >= this.config.holdDurationSec) {
           this._transitionTo(PHASES.GAP);
         }

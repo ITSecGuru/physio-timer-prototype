@@ -96,8 +96,8 @@ class AudioEngine {
     }
   }
 
-  // Hold: "Hold" then 2, 3, 4… with occasional encouragement
-  holdCount(second) {
+  // Hold: "Hold" then 2, 3, 4… with occasional encouragement for long holds
+  holdCount(second, holdDurationSec = 0) {
     if (second === 1) {
       if (this.languageMode === "hi") {
         this.speak("होल्ड", "hindi");
@@ -107,7 +107,7 @@ class AudioEngine {
         this.speak("Hold", "english");
       }
     } else {
-      const useEncouragement = second % 4 === 0;
+      const useEncouragement = holdDurationSec > 12 && second % 4 === 0;
       if (useEncouragement) {
         let word;
         if (this.languageMode === "hi") {
