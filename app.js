@@ -66,6 +66,11 @@ function renderExerciseOptions(selectedExercise) {
 
   select.innerHTML = "";
 
+  const placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.textContent = "Select an exercise";
+  select.appendChild(placeholderOption);
+
   exercises.forEach((exercise) => {
     const option = document.createElement("option");
     option.value = exercise;
@@ -76,6 +81,8 @@ function renderExerciseOptions(selectedExercise) {
   const resolvedSelection = exercises.includes(selectedExercise) ? selectedExercise : exercises[0] || "";
   if (resolvedSelection) {
     select.value = resolvedSelection;
+  } else {
+    select.value = "";
   }
 
   return resolvedSelection;

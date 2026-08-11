@@ -15,11 +15,11 @@
       <div class="config-grid">
         <label>
           Exercise name
-          <select id="exerciseName"></select>
+          <select id="exerciseName" aria-label="Exercise name"></select>
         </label>
 
         <label>
-          Add new exercise
+          Add new exercise to the list
           <input id="newExerciseName" type="text" placeholder="Type a new exercise name" />
         </label>
 
@@ -38,17 +38,17 @@
         </label>
 
         <label>
-          Movement duration (sec)
+          Movement duration
           <input id="moveDuration" type="number" min="1" max="10" value="3" />
         </label>
 
         <label>
-          Hold duration (sec)
+          Hold duration
           <input id="holdDuration" type="number" min="0" max="30" value="5" />
         </label>
 
         <label>
-          Gap duration (sec)
+          Gap duration
           <input id="gapDuration" type="number" min="0" max="30" value="4" />
         </label>
 
@@ -76,12 +76,6 @@
       <button id="resetBtn" class="secondary-btn">Reset</button>
     </section>
 
-    <section class="exercise-panel">
-      <h2>Saved Exercises</h2>
-      <div id="exerciseListEmpty" class="history-empty">No saved exercises available.</div>
-      <ul id="exerciseList" class="exercise-list"></ul>
-    </section>
-
     <section class="status-panel">
       <h2>Session Status</h2>
       <div class="status-grid">
@@ -90,7 +84,7 @@
         <div><span class="label">Repeat:</span> <span id="statusRepeat">0 / 0</span></div>
         <div><span class="label">Phase:</span> <span id="statusPhase">IDLE</span></div>
         <div><span class="label">Seconds in phase:</span> <span id="statusSeconds">0</span></div>
-        <div><span class="label">Adaptive gap (sec):</span> <span id="statusAdaptiveGap">-</span></div>
+        <div><span class="label">Adaptive gap:</span> <span id="statusAdaptiveGap">-</span></div>
       </div>
 
       <div class="progress-bars">
@@ -117,6 +111,12 @@
         <button id="pauseBtn" class="secondary-btn">Pause</button>
         <button id="resumeBtn" class="secondary-btn">Resume</button>
       </div>
+    </section>
+
+    <section class="exercise-panel">
+      <h2>Saved Exercises</h2>
+      <div id="exerciseListEmpty" class="history-empty">No saved exercises available.</div>
+      <ul id="exerciseList" class="exercise-list"></ul>
     </section>
 
     <section class="history-panel">
