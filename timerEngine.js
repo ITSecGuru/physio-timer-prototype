@@ -19,6 +19,7 @@ class TimerEngine {
     this.intervalId = null;
     this.paused = false;
     this.completionNotified = false;
+    this.betweenSetsResting = false;
 
     this.adaptiveEngine = new window.AdaptiveEngine(config.gapDurationSec);
     this.adaptiveEngine.setEnabled(config.adaptiveGap);
@@ -30,6 +31,7 @@ class TimerEngine {
     this.phase = PHASES.PREP;
     this.secondsInPhase = 0;
     this.completionNotified = false;
+    this.betweenSetsResting = false;
     this._startTick();
   }
 
@@ -68,8 +70,9 @@ class TimerEngine {
         break;
 
       case PHASES.GAP:
-        const gap = this.adaptiveEngine.getCurrentGap();
-        if (this.secondsInPhase >= gap) {
+        if (this.betweenSetsResting && this.secondsInPhase >= 0) {
+          this._startNextSet();
+        } else if (!this.betweenSetsResting && this.secondsInPhase >= this.adaptiveEngine.getCurrentGap()) {
           this._advanceRepeat(false);
         }
         break;
@@ -104,9 +107,10 @@ class TimerEngine {
 
         this._transitionTo(PHASES.GAP);
         this.secondsInPhase = -30;
+        this.betweenSetsResting = true;
       } else {
         this.phase = PHASES.COMPLETE;
-        window.audioEngine.speak("Session complete", "english");
+        window.audioEngine.announceSessionComplete();
 
         if (!this.completionNotified && this.callbacks?.onComplete) {
           this.completionNotified = true;
@@ -123,8 +127,17 @@ class TimerEngine {
 
   manualNext() {
     if (this.phase !== PHASES.COMPLETE && this.phase !== PHASES.IDLE) {
+      if (this.betweenSetsResting) {
+        this._startNextSet();
+        return;
+      }
       this._advanceRepeat(true);
     }
+  }
+
+  _startNextSet() {
+    this.betweenSetsResting = false;
+    this._transitionTo(PHASES.MOVE);
   }
 
   pause() {
@@ -142,6 +155,7 @@ class TimerEngine {
     this.currentSet = 1;
     this.currentRepeat = 1;
     this.completionNotified = false;
+    this.betweenSetsResting = false;
     this._notifyUpdate();
   }
 

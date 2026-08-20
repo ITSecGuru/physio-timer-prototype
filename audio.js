@@ -13,6 +13,12 @@ class AudioEngine {
       gujarati: ["Google ગુજરાતી"]
     };
 
+    this.languageTags = {
+      english: "en-US",
+      hindi: "hi-IN",
+      gujarati: "gu-IN"
+    };
+
     // Encouragement phrases
     this.encouragement = {
       en: ["Good", "Steady", "Nice", "Gentle"],
@@ -32,14 +38,14 @@ class AudioEngine {
     this.languageMode = mode; // "en" | "hi" | "gu"
   }
 
-  pickVoice(tagList) {
+  pickVoice(tagList, languageTag) {
     if (!("speechSynthesis" in window)) return null;
     const voices = speechSynthesis.getVoices();
     for (const tag of tagList) {
       const v = voices.find(x => x.name && x.name.includes(tag));
       if (v) return v;
     }
-    return null;
+    return voices.find(voice => voice.lang?.toLowerCase().startsWith(languageTag.slice(0, 2))) || null;
   }
 
   speak(text, langGroup = "english") {
@@ -50,13 +56,11 @@ class AudioEngine {
     utter.rate = 1.0;
     utter.pitch = 1.0;
 
-    let tags;
-    if (langGroup === "english") tags = this.voiceTags.english;
-    else if (langGroup === "hindi") tags = this.voiceTags.hindi;
-    else if (langGroup === "gujarati") tags = this.voiceTags.gujarati;
-    else tags = this.voiceTags.english;
+    const languageTag = this.languageTags[langGroup] || this.languageTags.english;
+    const tags = this.voiceTags[langGroup] || this.voiceTags.english;
+    utter.lang = languageTag;
 
-    const v = this.pickVoice(tags);
+    const v = this.pickVoice(tags, languageTag);
     if (v) utter.voice = v;
 
     // Slight pitch variation to avoid monotony
@@ -140,6 +144,16 @@ class AudioEngine {
       this.speak("ત્રીસ સેકન્ડ આરામ કરો", "gujarati");
     } else {
       this.speak("Take rest for 30 seconds", "english");
+    }
+  }
+
+  announceSessionComplete() {
+    if (this.languageMode === "hi") {
+      this.speak("सत्र पूरा हुआ", "hindi");
+    } else if (this.languageMode === "gu") {
+      this.speak("સેશન પૂર્ણ થયું", "gujarati");
+    } else {
+      this.speak("Session complete", "english");
     }
   }
 
