@@ -52,6 +52,7 @@ class AudioEngine {
     if (!this.audioEnabled) return;
     if (!("speechSynthesis" in window)) return;
 
+    speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
     utter.rate = 1.0;
     utter.pitch = 1.0;
@@ -67,6 +68,14 @@ class AudioEngine {
     utter.pitch = 0.9 + Math.random() * 0.2;
 
     speechSynthesis.speak(utter);
+  }
+
+  speakTimedCount(text, langGroup) {
+    if (!this.audioEnabled) return;
+    if (!("speechSynthesis" in window)) return;
+
+    speechSynthesis.cancel();
+    this.speak(text, langGroup);
   }
 
   // Repeat announcement with variation + language
@@ -116,21 +125,21 @@ class AudioEngine {
         let word;
         if (this.languageMode === "hi") {
           word = this.encouragement.hi[Math.floor(Math.random() * this.encouragement.hi.length)];
-          this.speak(`${word}… ${second}`, "hindi");
+          this.speakTimedCount(`${word}… ${second}`, "hindi");
         } else if (this.languageMode === "gu") {
           word = this.encouragement.gu[Math.floor(Math.random() * this.encouragement.gu.length)];
-          this.speak(`${word}… ${second}`, "gujarati");
+          this.speakTimedCount(`${word}… ${second}`, "gujarati");
         } else {
           word = this.encouragement.en[Math.floor(Math.random() * this.encouragement.en.length)];
-          this.speak(`${word}… ${second}`, "english");
+          this.speakTimedCount(`${word}… ${second}`, "english");
         }
       } else {
         if (this.languageMode === "hi") {
-          this.speak(String(second), "hindi");
+          this.speakTimedCount(String(second), "hindi");
         } else if (this.languageMode === "gu") {
-          this.speak(String(second), "gujarati");
+          this.speakTimedCount(String(second), "gujarati");
         } else {
-          this.speak(String(second), "english");
+          this.speakTimedCount(String(second), "english");
         }
       }
     }
